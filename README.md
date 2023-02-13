@@ -6,21 +6,39 @@ The primary goal of this test application is to study the basic methods of the S
 
 ### Deployment
 
-In order to deploy the example, you need to run the following command:
+In order to test the example, you need to run the following command:
 
 ```
-$ serverless deploy
+$ serverless offline
 ```
 
-After running deploy, you should see output similar to:
+After running offline, you should see output similar to:
 
 ```bash
-Deploying aws-node-project to stage dev (us-east-1)
+Starting Offline at stage dev (us-east-1)
 
-✔ Service deployed to stack aws-node-project-dev (112s)
+Offline [http for lambda] listening on http://localhost:3002
+Function names exposed for local invocation by aws-sdk:
+           * insert: sequelize-mysql-dev-insert
+           * get: sequelize-mysql-dev-get
+           * delete: sequelize-mysql-dev-delete
+           * put: sequelize-mysql-dev-put
 
-functions:
-  hello: aws-node-project-dev-hello (1.5 kB)
+   ┌────────────────────────────────────────────────────────────────────────────┐
+   │                                                                            │
+   │   POST   | http://localhost:3000/dev/heroes                                │
+   │   POST   | http://localhost:3000/2015-03-31/functions/insert/invocations   │
+   │   GET    | http://localhost:3000/dev/heroes                                │
+   │   POST   | http://localhost:3000/2015-03-31/functions/get/invocations      │
+   │   DELETE | http://localhost:3000/dev/heroes/{id}                           │
+   │   POST   | http://localhost:3000/2015-03-31/functions/delete/invocations   │
+   │   PUT    | http://localhost:3000/dev/heroes/{id}                           │
+   │   POST   | http://localhost:3000/2015-03-31/functions/put/invocations      │
+   │                                                                            │
+   └────────────────────────────────────────────────────────────────────────────┘
+
+Server ready: http://localhost:3000 🚀
+
 ```
 
 ### Invocation
@@ -28,31 +46,17 @@ functions:
 After successful deployment, you can invoke the deployed function by using the following command:
 
 ```bash
-serverless invoke --function hello
+sls invoke local -f insert
 ```
+This will register a new hero on your database, after this you can test all REST endpoints.
 
 Which should result in response similar to the following:
 
 ```json
 {
-    "statusCode": 200,
-    "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": {}\n}"
-}
-```
-
-### Local development
-
-You can invoke your function locally by using the following command:
-
-```bash
-serverless invoke local --function hello
-```
-
-Which should result in response similar to the following:
-
-```
 {
     "statusCode": 200,
-    "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": \"\"\n}"
+    "body": "{\"id\":38,\"name\":\"Francesco\",\"power\":\"Chief Brand Supervisor\",\"updatedAt\":\"2023-02-13T22:21:54.825Z\",\"createdAt\":\"2023-02-13T22:21:54.825Z\"}"
+}
 }
 ```
