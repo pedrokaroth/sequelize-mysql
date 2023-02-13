@@ -1,0 +1,43 @@
+service: sequelize-mysql
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  environment:
+    MYSQL_HOST: 172.17.0.3
+    MYSQL_USER: admin
+    MYSQL_PASSWORD: admin
+
+functions:
+  insert:
+    handler: src/index.insert
+    events:
+      - http:
+          path: "/heroes"
+          method: post   
+
+  get:
+    handler: src/index.get
+    events:
+      - http:
+          path: "/heroes"
+          method: get
+
+  delete:
+    handler: src/index.delete
+    events:
+      - http:
+          path: "/heroes/{id}"
+          method: delete
+
+  put:
+    handler: src/index.put
+    events:
+      - http:
+          path: "/heroes/{id}"
+          method: put
+
+
+plugins:
+  - serverless-offline
